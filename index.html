@@ -632,6 +632,7 @@
       font-size: 0.85rem;
       color: #d1d5db;
       font-family: monospace;
+      line-height: 1.4;
     }
   </style>
 </head>
@@ -646,7 +647,7 @@
       <div class="main-card">
         <div class="card-header">
           <h2 class="card-title">🔍 Bino Service Helper</h2>
-          <p class="card-subtitle">Get help with flights, hotels, taxis, rentals, AC repair, car dent fixing, or selling your items</p>
+          <p class="card-subtitle">Follow the correct workflow: Start with "New Search", then specify your service and location step by step</p>
         </div>
 
         <div class="features-grid">
@@ -742,7 +743,7 @@
           <div class="button-group">
             <button type="submit" id="searchBtn" class="btn btn-primary pulse">
               <i class="fab fa-whatsapp"></i>
-              Get Service via WhatsApp
+              Start with "New Search"
             </button>
             <button type="button" onclick="clearForm()" class="btn btn-secondary">
               <i class="fas fa-refresh"></i>
@@ -773,7 +774,7 @@
           </div>
           <div class="whatsapp-message" id="messagePreview"></div>
           <div style="margin-top: 0.5rem; font-size: 0.75rem; color: #a3a3a3; font-style: italic;">
-            💡 Tip: After sending, Bino may ask you to "go to Menu and select New Search" for better assistance
+            � <strong>Next Steps:</strong> After sending "New Search", Bino will ask "what can I help you find today?" Then reply with your service (e.g., "AC repair"), then location when asked
           </div>
         </div>
 
@@ -787,9 +788,12 @@
               <i class="fas fa-info-circle"></i> How to use Bino effectively:
             </div>
             <div style="font-size: 0.75rem; color: #a3a3a3; line-height: 1.4;">
-              • Send your request as shown in the preview<br>
-              • If Bino asks you to "go to Menu and select New Search", follow that instruction<br>
-              • Bino works best with: flights, hotels, taxis, rentals, AC repair, car repair, and selling items
+              <strong>🎯 Bino Workflow (Based on Testing):</strong><br>
+              1. Send "New Search" first<br>
+              2. When Bino asks "what can I help you find?", reply with service type (e.g., "AC repair")<br>
+              3. When asked for location, provide your area (e.g., "Koramangala")<br>
+              4. When asked for details, describe the issue (e.g., "Not working")<br>
+              5. Confirm when Bino summarizes your request
             </div>
           </div>
         </div>
@@ -868,7 +872,17 @@
         
         if (category && city) {
           const message = this.generateSmartMessage();
-          messageElement.textContent = message;
+          const followUp = this.getFollowUpMessages();
+          
+          messageElement.innerHTML = `
+            <div><strong>1st Message:</strong> ${message}</div>
+            <div style="margin-top: 0.5rem; color: #a3a3a3; font-size: 0.8em;">
+              <strong>Then when asked:</strong><br>
+              • "What can I help you find?" → "${followUp.step2}"<br>
+              • "Location?" → "${followUp.step3}"<br>
+              • "Details?" → "${followUp.step4}"
+            </div>
+          `;
           preview.classList.add('show');
         } else {
           preview.classList.remove('show');
@@ -905,77 +919,38 @@
         
         if (!category || !city) return '';
         
-        let message = '';
-        
-        // Generate simple, direct messages based on Bino's actual responses
-        switch(category) {
-          case 'flights':
-            message = requirements ? 
-              `I need to book a flight in ${city}. ${requirements}` :
-              `I need to book a flight in ${city}`;
-            break;
-          case 'hotels':
-            message = requirements ? 
-              `I need a hotel in ${city}. ${requirements}` :
-              `I need a hotel in ${city}`;
-            break;
-          case 'taxis':
-            message = requirements ? 
-              `I need a taxi in ${city}. ${requirements}` :
-              `I need a taxi in ${city}`;
-            break;
-          case 'bike_rental':
-            message = requirements ? 
-              `I need bike rental in ${city}. ${requirements}` :
-              `I need bike rental in ${city}`;
-            break;
-          case 'car_rental':
-            message = requirements ? 
-              `I need car rental in ${city}. ${requirements}` :
-              `I need car rental in ${city}`;
-            break;
-          case 'ac_repair':
-            message = requirements ? 
-              `I need AC repair service in ${city} ${requirements}` :
-              `I need AC repair service in ${city}`;
-            break;
-          case 'car_repair':
-            message = requirements ? 
-              `I need car dent repair in ${city}. ${requirements}` :
-              `I need car dent repair in ${city}`;
-            break;
-          case 'sell_tv':
-            message = requirements ? 
-              `I want to sell my TV in ${city}. ${requirements}` :
-              `I want to sell my TV in ${city}`;
-            break;
-          case 'sell_ac':
-            message = requirements ? 
-              `I want to sell my AC in ${city}. ${requirements}` :
-              `I want to sell my AC in ${city}`;
-            break;
-          case 'sell_bike':
-            message = requirements ? 
-              `I want to sell my bike in ${city}. ${requirements}` :
-              `I want to sell my bike in ${city}`;
-            break;
-          case 'sell_car':
-            message = requirements ? 
-              `I want to sell my car in ${city}. ${requirements}` :
-              `I want to sell my car in ${city}`;
-            break;
-          case 'other':
-            message = requirements ? 
-              `I need help with ${requirements} in ${city}` :
-              `I need help with a service in ${city}`;
-            break;
-          default:
-            message = requirements ? 
-              `I need ${category} in ${city}. ${requirements}` :
-              `I need ${category} in ${city}`;
-        }
+        // Based on successful interaction pattern, start with "New Search"
+        let message = 'New Search';
         
         return message;
+      }
+
+      getFollowUpMessages() {
+        const category = document.getElementById('category').value;
+        const city = document.getElementById('city').value;
+        const requirements = document.getElementById('area').value.trim();
+        
+        let serviceType = '';
+        switch(category) {
+          case 'flights': serviceType = 'flight booking'; break;
+          case 'hotels': serviceType = 'hotel booking'; break;
+          case 'taxis': serviceType = 'taxi booking'; break;
+          case 'bike_rental': serviceType = 'bike rental'; break;
+          case 'car_rental': serviceType = 'car rental'; break;
+          case 'ac_repair': serviceType = 'AC repair'; break;
+          case 'car_repair': serviceType = 'car dent repair'; break;
+          case 'sell_tv': serviceType = 'sell TV'; break;
+          case 'sell_ac': serviceType = 'sell AC'; break;
+          case 'sell_bike': serviceType = 'sell bike'; break;
+          case 'sell_car': serviceType = 'sell car'; break;
+          default: serviceType = category;
+        }
+        
+        return {
+          step2: serviceType,
+          step3: city,
+          step4: requirements || 'Provide specific details when asked'
+        };
       }
 
       showStatus(type, message) {
@@ -1039,7 +1014,8 @@
           const opened = window.open(whatsappURL, '_blank');
           
           if (opened) {
-            this.showStatus('successMessage', `🎉 Opening WhatsApp chat! Bino will help you with ${category} in ${city}`);
+            const followUp = this.getFollowUpMessages();
+            this.showStatus('successMessage', `🎉 WhatsApp opened! Next: When Bino asks "what can I help you find?", reply with "${followUp.step2}"`);
             this.trackUsage(category, city);
           } else {
             this.showStatus('errorMessage', 'Please allow popups to open WhatsApp or try again');
