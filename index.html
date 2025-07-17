@@ -130,12 +130,34 @@
       text-align: center;
       transition: all 0.3s ease;
       cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .feature-item::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(16, 185, 129, 0.1), transparent);
+      transition: left 0.5s ease;
     }
 
     .feature-item:hover {
       background: rgba(16, 185, 129, 0.1);
       border-color: rgba(16, 185, 129, 0.3);
       transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(16, 185, 129, 0.2);
+    }
+
+    .feature-item:hover::before {
+      left: 100%;
+    }
+
+    .feature-item:active {
+      transform: translateY(0) scale(0.98);
     }
 
     .feature-icon {
@@ -651,25 +673,25 @@
         </div>
 
         <div class="features-grid">
-          <div class="feature-item">
+          <div class="feature-item" onclick="setQuickCategory('travel')">
             <div class="feature-icon">
               <i class="fas fa-plane"></i>
             </div>
             <div class="feature-text">Book Travel</div>
           </div>
-          <div class="feature-item" onclick="window.open('https://wa.me/919800081110', '_blank')">
+          <div class="feature-item" onclick="window.open('https://wa.me/919800081110?text=New%20Search%0A%0AHi%20Bino!%20I%20need%20help%20finding%20services.', '_blank')">
             <div class="feature-icon">
               <i class="fab fa-whatsapp"></i>
             </div>
             <div class="feature-text">WhatsApp Native</div>
           </div>
-          <div class="feature-item">
+          <div class="feature-item" onclick="setQuickCategory('repair')">
             <div class="feature-icon">
               <i class="fas fa-tools"></i>
             </div>
             <div class="feature-text">Repair Services</div>
           </div>
-          <div class="feature-item">
+          <div class="feature-item" onclick="setQuickCategory('sell')">
             <div class="feature-icon">
               <i class="fas fa-tag"></i>
             </div>
@@ -1099,6 +1121,67 @@ ${message}
       const form = document.getElementById('storeSearchForm');
       const event = new Event('submit');
       form.dispatchEvent(event);
+    }
+
+    // Quick category selection function
+    function setQuickCategory(type) {
+      const categorySelect = document.getElementById('category');
+      const citySelect = document.getElementById('city');
+      
+      // Clear any existing messages
+      document.querySelectorAll('.status-message').forEach(el => {
+        el.style.display = 'none';
+      });
+      
+      // Set appropriate category based on type
+      switch(type) {
+        case 'travel':
+          // Focus on travel options
+          categorySelect.value = 'flights';
+          binoApp.showStatus('successMessage', '✈️ Travel category selected! Choose your city to continue.');
+          break;
+        case 'repair':
+          // Focus on repair services
+          categorySelect.value = 'ac_repair';
+          binoApp.showStatus('successMessage', '🔧 Repair services selected! Choose your city to continue.');
+          break;
+        case 'sell':
+          // Focus on selling items
+          categorySelect.value = 'sell_tv';
+          binoApp.showStatus('successMessage', '🏷️ Selling category selected! Choose your city to continue.');
+          break;
+      }
+      
+      // Trigger validation and preview update
+      binoApp.validateForm();
+      binoApp.updateMessagePreview();
+      
+      // Focus on city selection if category is set
+      if (categorySelect.value) {
+        setTimeout(() => {
+          citySelect.focus();
+          citySelect.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }, 500);
+      }
+      
+      // Add visual feedback - using event.target safely
+      const clickedItem = event.target.closest('.feature-item');
+      if (clickedItem) {
+        // Reset all items
+        document.querySelectorAll('.feature-item').forEach(item => {
+          item.style.transform = 'scale(1)';
+          item.style.background = 'rgba(255, 255, 255, 0.05)';
+        });
+        
+        // Highlight selected category
+        clickedItem.style.background = 'rgba(16, 185, 129, 0.2)';
+        clickedItem.style.transform = 'scale(1.05)';
+        
+        setTimeout(() => {
+          clickedItem.style.background = 'rgba(255, 255, 255, 0.05)';
+          clickedItem.style.transform = 'scale(1)';
+        }, 1000);
+      }
     }
     
     // Enhanced interactions and animations
