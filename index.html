@@ -647,7 +647,7 @@
       <div class="main-card">
         <div class="card-header">
           <h2 class="card-title">🔍 Bino Service Helper</h2>
-          <p class="card-subtitle">Follow the correct workflow: Start with "New Search", then specify your service and location step by step</p>
+          <p class="card-subtitle">Generate a complete message with all your requirements - no more back-and-forth questions!</p>
         </div>
 
         <div class="features-grid">
@@ -743,7 +743,7 @@
           <div class="button-group">
             <button type="submit" id="searchBtn" class="btn btn-primary pulse">
               <i class="fab fa-whatsapp"></i>
-              Start with "New Search"
+              Send Complete Message
             </button>
             <button type="button" onclick="clearForm()" class="btn btn-secondary">
               <i class="fas fa-refresh"></i>
@@ -770,7 +770,7 @@
         <div id="whatsappPreview" class="whatsapp-preview">
           <div class="whatsapp-header">
             <i class="fab fa-whatsapp whatsapp-icon"></i>
-            <span class="whatsapp-title">Complete Bino Workflow</span>
+            <span class="whatsapp-title">Your Complete Message</span>
           </div>
           <div class="whatsapp-message" id="messagePreview"></div>
           <div style="margin-top: 0.5rem; font-size: 0.75rem; color: #a3a3a3; font-style: italic;">
@@ -788,12 +788,12 @@
               <i class="fas fa-info-circle"></i> How to use Bino effectively:
             </div>
             <div style="font-size: 0.75rem; color: #a3a3a3; line-height: 1.4;">
-              <strong>🎯 Bino Workflow (Based on Testing):</strong><br>
-              1. Send "New Search" first<br>
-              2. When Bino asks "what can I help you find?", reply with service type (e.g., "AC repair")<br>
-              3. When asked for location, provide your area (e.g., "Koramangala")<br>
-              4. When asked for details, describe the issue (e.g., "Not working")<br>
-              5. Confirm when Bino summarizes your request
+              <strong>🚀 Smart Message Benefits:</strong><br>
+              • Sends complete request in one message<br>
+              • Includes service type, location, and requirements<br>
+              • Reduces back-and-forth conversation<br>
+              • Gets faster, more accurate results from Bino<br>
+              • No need to wait for follow-up questions
             </div>
           </div>
         </div>
@@ -871,33 +871,22 @@
         const messageElement = document.getElementById('messagePreview');
         
         if (category && city) {
-          const followUp = this.getFollowUpMessages();
+          const message = this.generateSmartMessage();
           
           messageElement.innerHTML = `
             <div style="margin-bottom: 0.8rem;">
-              <div style="font-weight: bold; color: #25d366; margin-bottom: 0.3rem;">📱 Step-by-Step Bino Workflow:</div>
+              <div style="font-weight: bold; color: #25d366; margin-bottom: 0.5rem;">📱 Your Complete Message to Bino:</div>
               
-              <div style="margin-bottom: 0.5rem;">
-                <strong>1️⃣ First Message:</strong> <code style="background: rgba(255,255,255,0.1); padding: 2px 6px; border-radius: 4px;">New Search</code>
+              <div style="background: rgba(255,255,255,0.05); padding: 0.8rem; border-radius: 6px; border-left: 3px solid #25d366; white-space: pre-line; font-family: 'Courier New', monospace; line-height: 1.5;">
+${message}
               </div>
               
-              <div style="margin-bottom: 0.5rem;">
-                <strong>2️⃣ When asked "What can I help you find?":</strong><br>
-                <code style="background: rgba(255,255,255,0.1); padding: 2px 6px; border-radius: 4px;">${followUp.step2}</code>
-              </div>
-              
-              <div style="margin-bottom: 0.5rem;">
-                <strong>3️⃣ When asked for location:</strong><br>
-                <code style="background: rgba(255,255,255,0.1); padding: 2px 6px; border-radius: 4px;">${followUp.step3}</code>
-              </div>
-              
-              <div style="margin-bottom: 0.5rem;">
-                <strong>4️⃣ When asked for details:</strong><br>
-                <code style="background: rgba(255,255,255,0.1); padding: 2px 6px; border-radius: 4px;">${followUp.step4}</code>
-              </div>
-              
-              <div style="font-size: 0.8em; color: #a3a3a3; margin-top: 0.5rem;">
-                <strong>5️⃣ Finally:</strong> Say "Yes" when Bino confirms your request
+              <div style="font-size: 0.8em; color: #a3a3a3; margin-top: 0.8rem;">
+                <strong>✨ Benefits:</strong><br>
+                • Complete information in one message<br>
+                • No need for back-and-forth questions<br>
+                • Faster response from Bino<br>
+                • All your requirements included upfront
               </div>
             </div>
           `;
@@ -937,8 +926,31 @@
         
         if (!category || !city) return '';
         
-        // Based on successful interaction pattern, start with "New Search"
-        let message = 'New Search';
+        // Create a comprehensive message that includes all info
+        let serviceText = '';
+        switch(category) {
+          case 'flights': serviceText = 'flight booking'; break;
+          case 'hotels': serviceText = 'hotel booking'; break;
+          case 'taxis': serviceText = 'taxi booking'; break;
+          case 'bike_rental': serviceText = 'bike rental'; break;
+          case 'car_rental': serviceText = 'car rental'; break;
+          case 'ac_repair': serviceText = 'AC repair'; break;
+          case 'car_repair': serviceText = 'car dent repair'; break;
+          case 'sell_tv': serviceText = 'sell my TV'; break;
+          case 'sell_ac': serviceText = 'sell my AC'; break;
+          case 'sell_bike': serviceText = 'sell my bike'; break;
+          case 'sell_car': serviceText = 'sell my car'; break;
+          default: serviceText = category;
+        }
+        
+        // Build comprehensive message
+        let message = `New Search\n\nI need help with ${serviceText} in ${city}.`;
+        
+        if (requirements) {
+          message += `\n\nSpecific requirements: ${requirements}`;
+        }
+        
+        message += `\n\nPlease help me find the best options available.`;
         
         return message;
       }
@@ -1032,8 +1044,7 @@
           const opened = window.open(whatsappURL, '_blank');
           
           if (opened) {
-            const followUp = this.getFollowUpMessages();
-            this.showStatus('successMessage', `🎉 WhatsApp opened! Next: When Bino asks "what can I help you find?", reply with "${followUp.step2}"`);
+            this.showStatus('successMessage', `🎉 WhatsApp opened with your complete request! Bino will now process your ${category} request for ${city}`);
             this.trackUsage(category, city);
           } else {
             this.showStatus('errorMessage', 'Please allow popups to open WhatsApp or try again');
