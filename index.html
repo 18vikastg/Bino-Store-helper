@@ -646,7 +646,7 @@
       <div class="main-card">
         <div class="card-header">
           <h2 class="card-title">🔍 Discover Local Stores</h2>
-          <p class="card-subtitle">Search for any store type and connect instantly via WhatsApp</p>
+          <p class="card-subtitle">Generate the perfect query for Bino's AI assistant to find exactly what you need</p>
         </div>
 
         <div class="features-grid">
@@ -777,9 +777,12 @@
         <div id="whatsappPreview" class="whatsapp-preview">
           <div class="whatsapp-header">
             <i class="fab fa-whatsapp whatsapp-icon"></i>
-            <span class="whatsapp-title">Message Preview</span>
+            <span class="whatsapp-title">Your Bino Query</span>
           </div>
           <div class="whatsapp-message" id="messagePreview"></div>
+          <div style="margin-top: 0.5rem; font-size: 0.75rem; color: #a3a3a3; font-style: italic;">
+            This natural query format works perfectly with Bino's AI assistant
+          </div>
         </div>
 
         <div class="footer">
@@ -898,23 +901,41 @@
         const city = document.getElementById('city').value;
         const area = document.getElementById('area').value;
         
-        let message = `🔍 Hi! I'm looking for a ${category} in ${city}`;
+        // Generate a more natural query that aligns with Bino's use cases
+        let message = '';
         
         if (area.trim()) {
-          message += ` near ${area.trim()}`;
+          message = `Find the best ${category.toLowerCase()} in ${area}, ${city}`;
+        } else {
+          message = `Find the best ${category.toLowerCase()} in ${city}`;
         }
         
-        message += ` via Bino Store Discovery.\n\n`;
-        message += `📋 My requirements:\n`;
-        message += `• Category: ${category}\n`;
-        message += `• Location: ${city}`;
+        // Add specific requirements based on category
+        const categoryRequirements = {
+          'Beauty Salon': 'with good reviews and experienced stylists',
+          'Hair Salon': 'with skilled hairdressers and modern equipment',
+          'Grocery Store': 'with fresh produce and good prices',
+          'Supermarket': 'with wide selection and convenient location',
+          'Pharmacy': 'that\'s reliable and well-stocked',
+          'Medical Store': 'with all medicines available',
+          'Pet Store': 'with healthy pets and supplies',
+          'Pet Clinic': 'with experienced veterinarians',
+          'Hardware Store': 'with quality tools and materials',
+          'Electronics Store': 'with latest gadgets and good warranties',
+          'Clothing Store': 'with trendy fashion and good quality',
+          'Shoe Store': 'with comfortable and stylish shoes',
+          'Restaurant': 'with great food and good ratings',
+          'Cafe': 'with excellent coffee and cozy atmosphere',
+          'Bakery': 'with fresh bread and delicious pastries',
+          'Gym': 'with modern equipment and good trainers',
+          'Book Store': 'with wide collection and good prices',
+          'Stationery': 'with quality supplies and good variety',
+          'Auto Repair': 'with skilled mechanics and fair pricing',
+          'Bank': 'with good customer service and convenient location'
+        };
         
-        if (area.trim()) {
-          message += ` (${area.trim()})`;
-        }
-        
-        message += `\n• Looking for: Best recommendations with good ratings\n\n`;
-        message += `Can you help me find the best options? 😊`;
+        const requirement = categoryRequirements[category] || 'with good ratings and reviews';
+        message += ` ${requirement}`;
         
         return message;
       }
