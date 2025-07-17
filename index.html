@@ -337,43 +337,248 @@
     .footer-logo {
       color: #10b981;
       font-weight: 600;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      cursor: pointer;
     }
 
-    /* Responsive Design */
+    .footer-logo:hover {
+      color: #34d399;
+      text-decoration: underline;
+    }
+
+    /* Enhanced Responsive Design */
     @media (max-width: 768px) {
+      .container {
+        padding: 1rem;
+      }
+
       .hero-title {
         font-size: 2.5rem;
       }
 
       .hero-subtitle {
         font-size: 1.2rem;
+        padding: 0 1rem;
       }
 
       .main-card {
         margin: 1rem;
         padding: 2rem;
+        border-radius: 20px;
       }
 
       .features-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.75rem;
+      }
+
+      .feature-item {
+        padding: 0.75rem;
+      }
+
+      .feature-icon {
+        font-size: 1.25rem;
+      }
+
+      .feature-text {
+        font-size: 0.8rem;
       }
 
       .button-group {
         flex-direction: column;
+        gap: 0.75rem;
+      }
+
+      .btn {
+        padding: 0.875rem 1.5rem;
       }
     }
 
     @media (max-width: 480px) {
+      .hero-section {
+        padding: 1rem 0;
+      }
+
       .hero-title {
         font-size: 2rem;
+        line-height: 1.2;
       }
 
       .hero-subtitle {
         font-size: 1rem;
+        margin-bottom: 2rem;
       }
 
       .main-card {
+        margin: 0.5rem;
         padding: 1.5rem;
+        border-radius: 16px;
+      }
+
+      .card-title {
+        font-size: 1.25rem;
+      }
+
+      .card-subtitle {
+        font-size: 0.9rem;
+      }
+
+      .features-grid {
+        grid-template-columns: 1fr;
+        gap: 0.5rem;
+        margin-bottom: 2rem;
+      }
+
+      .feature-item {
+        padding: 1rem;
+        border-radius: 10px;
+      }
+
+      .form-group {
+        margin-bottom: 1.25rem;
+      }
+
+      .form-label {
+        font-size: 0.85rem;
+      }
+
+      .form-select, .form-input {
+        padding: 0.875rem 1.25rem;
+        font-size: 0.95rem;
+        border-radius: 10px;
+      }
+
+      .btn {
+        padding: 1rem;
+        font-size: 0.95rem;
+        border-radius: 10px;
+      }
+
+      .status-message {
+        padding: 0.875rem;
+        font-size: 0.9rem;
+        border-radius: 10px;
+      }
+
+      .whatsapp-preview {
+        padding: 0.875rem;
+        border-radius: 10px;
+      }
+
+      .whatsapp-message {
+        font-size: 0.8rem;
+        padding: 0.625rem;
+      }
+    }
+
+    @media (max-width: 320px) {
+      .hero-title {
+        font-size: 1.75rem;
+      }
+
+      .hero-subtitle {
+        font-size: 0.9rem;
+      }
+
+      .main-card {
+        margin: 0.25rem;
+        padding: 1.25rem;
+      }
+
+      .features-grid {
+        gap: 0.375rem;
+      }
+
+      .feature-item {
+        padding: 0.75rem;
+      }
+
+      .form-select, .form-input {
+        padding: 0.75rem 1rem;
+        font-size: 0.9rem;
+      }
+
+      .btn {
+        padding: 0.875rem;
+        font-size: 0.9rem;
+      }
+    }
+
+    /* Landscape orientation for mobile */
+    @media (max-height: 600px) and (orientation: landscape) {
+      .hero-section {
+        min-height: auto;
+        padding: 2rem 0;
+      }
+
+      .hero-content {
+        margin-bottom: 2rem;
+      }
+
+      .hero-title {
+        font-size: 2rem;
+        margin-bottom: 1rem;
+      }
+
+      .hero-subtitle {
+        font-size: 1rem;
+        margin-bottom: 1.5rem;
+      }
+
+      .main-card {
+        padding: 2rem;
+      }
+    }
+
+    /* Tablet specific styles */
+    @media (min-width: 481px) and (max-width: 768px) {
+      .hero-title {
+        font-size: 3rem;
+      }
+
+      .hero-subtitle {
+        font-size: 1.3rem;
+      }
+
+      .main-card {
+        max-width: 600px;
+        padding: 2.5rem;
+      }
+
+      .features-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+      }
+
+      .feature-item {
+        padding: 1.25rem;
+      }
+
+      .btn {
+        padding: 1.125rem 2rem;
+      }
+    }
+
+    /* Enhanced clickability for touch devices */
+    @media (hover: none) and (pointer: coarse) {
+      .feature-item {
+        min-height: 44px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 1rem;
+      }
+
+      .btn {
+        min-height: 44px;
+      }
+
+      .footer-logo {
+        min-height: 44px;
+        display: inline-flex;
+        align-items: center;
       }
     }
 
@@ -451,7 +656,7 @@
             </div>
             <div class="feature-text">Smart Search</div>
           </div>
-          <div class="feature-item">
+          <div class="feature-item" onclick="window.open('https://wa.me/919800081110', '_blank')">
             <div class="feature-icon">
               <i class="fab fa-whatsapp"></i>
             </div>
@@ -580,7 +785,7 @@
         <div class="footer">
           <p class="footer-text">
             <i class="fas fa-bolt"></i>
-            Powered by <span class="footer-logo">Bino</span> Store Discovery Platform
+            Powered by <a href="https://bino.bot/" target="_blank" class="footer-logo">Bino</a> Store Discovery Platform
           </p>
         </div>
       </div>
@@ -834,31 +1039,89 @@
     
     // Enhanced interactions and animations
     document.addEventListener('DOMContentLoaded', function() {
-      // Add hover effects to feature items
+      // Add hover effects to feature items (with touch support)
       document.querySelectorAll('.feature-item').forEach(item => {
         item.addEventListener('mouseenter', function() {
-          this.style.transform = 'translateY(-4px) scale(1.02)';
+          if (window.innerWidth > 768) {
+            this.style.transform = 'translateY(-4px) scale(1.02)';
+          }
         });
         
         item.addEventListener('mouseleave', function() {
-          this.style.transform = 'translateY(0) scale(1)';
+          if (window.innerWidth > 768) {
+            this.style.transform = 'translateY(0) scale(1)';
+          }
+        });
+
+        // Add touch feedback for mobile
+        item.addEventListener('touchstart', function() {
+          this.style.transform = 'scale(0.98)';
+          this.style.background = 'rgba(16, 185, 129, 0.15)';
+        });
+
+        item.addEventListener('touchend', function() {
+          setTimeout(() => {
+            this.style.transform = 'scale(1)';
+            this.style.background = 'rgba(255, 255, 255, 0.05)';
+          }, 150);
         });
       });
       
-      // Add focus animations for form elements
+      // Add focus animations for form elements (responsive)
       document.querySelectorAll('.form-select, .form-input').forEach(element => {
         element.addEventListener('focus', function() {
-          this.parentElement.style.transform = 'translateY(-2px)';
+          if (window.innerWidth > 480) {
+            this.parentElement.style.transform = 'translateY(-2px)';
+          }
         });
         
         element.addEventListener('blur', function() {
-          this.parentElement.style.transform = 'translateY(0)';
+          if (window.innerWidth > 480) {
+            this.parentElement.style.transform = 'translateY(0)';
+          }
         });
       });
+
+      // Handle orientation changes
+      window.addEventListener('orientationchange', function() {
+        setTimeout(() => {
+          // Recalculate viewport height for mobile browsers
+          document.documentElement.style.setProperty('--vh', `${window.innerHeight * 0.01}px`);
+        }, 100);
+      });
+
+      // Handle window resize for responsive adjustments
+      window.addEventListener('resize', function() {
+        // Debounce resize events
+        clearTimeout(this.resizeTimeout);
+        this.resizeTimeout = setTimeout(() => {
+          // Update CSS custom properties for responsive design
+          document.documentElement.style.setProperty('--vh', `${window.innerHeight * 0.01}px`);
+          
+          // Adjust animations based on screen size
+          const isSmallScreen = window.innerWidth <= 768;
+          document.querySelectorAll('.feature-item').forEach(item => {
+            if (isSmallScreen) {
+              item.style.transform = 'scale(1)';
+            }
+          });
+        }, 250);
+      });
+
+      // Set initial viewport height
+      document.documentElement.style.setProperty('--vh', `${window.innerHeight * 0.01}px`);
       
       // Add CSS animations
       const style = document.createElement('style');
       style.textContent = `
+        :root {
+          --vh: 1vh;
+        }
+
+        .hero-section {
+          min-height: calc(var(--vh, 1vh) * 100);
+        }
+
         @keyframes fadeInUp {
           from {
             opacity: 0;
@@ -873,10 +1136,29 @@
         .hero-content, .main-card {
           opacity: 0;
         }
+
+        /* Enhanced button animations for mobile */
+        @media (max-width: 768px) {
+          .btn:active {
+            transform: scale(0.98);
+          }
+        }
+
+        /* Smooth scrolling for mobile */
+        html {
+          scroll-behavior: smooth;
+        }
+
+        /* Better text selection on mobile */
+        .whatsapp-message {
+          user-select: all;
+          -webkit-user-select: all;
+        }
       `;
       document.head.appendChild(style);
       
       console.log('🚀 Bino Store Discovery Helper loaded successfully!');
+      console.log('📱 Responsive design activated for all screen sizes');
     });
     
     // Performance and analytics
