@@ -4,100 +4,671 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Bino Store Discovery Helper</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      background: #f0f4f8;
+    * {
       margin: 0;
       padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
     }
 
     .container {
-      max-width: 500px;
-      margin: 50px auto;
-      padding: 2rem;
-      background: white;
-      border-radius: 10px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      max-width: 450px;
+      width: 100%;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(15px);
+      border-radius: 20px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+      padding: 2.5rem;
       text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .container::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #009688, #00bcd4, #4caf50);
+    }
+
+    .header {
+      margin-bottom: 2rem;
     }
 
     h1 {
+      background: linear-gradient(135deg, #009688, #00bcd4);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .subtitle {
+      color: #666;
+      font-size: 1rem;
+      font-weight: 400;
+      margin-bottom: 1rem;
+    }
+
+    .features {
+      display: flex;
+      justify-content: space-around;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .feature {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      color: #555;
+      font-size: 0.8rem;
+    }
+
+    .feature i {
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
       color: #009688;
     }
 
     .form-group {
-      margin: 1rem 0;
+      margin: 1.5rem 0;
       text-align: left;
+      position: relative;
     }
 
     label {
-      font-weight: bold;
+      font-weight: 600;
+      color: #333;
+      display: flex;
+      align-items: center;
+      margin-bottom: 0.5rem;
+      font-size: 0.9rem;
     }
 
-    select {
+    label i {
+      margin-right: 0.5rem;
+      color: #009688;
+    }
+
+    select, input {
       width: 100%;
-      padding: 0.5rem;
-      margin-top: 0.5rem;
-      border-radius: 5px;
-      border: 1px solid #ccc;
+      padding: 1rem;
+      border: 2px solid #e1e5e9;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-family: inherit;
+      background: white;
+      transition: all 0.3s ease;
+      appearance: none;
+    }
+
+    select:focus, input:focus {
+      outline: none;
+      border-color: #009688;
+      box-shadow: 0 0 0 3px rgba(0, 150, 136, 0.1);
+      transform: translateY(-2px);
+    }
+
+    .select-wrapper {
+      position: relative;
+    }
+
+    .select-wrapper::after {
+      content: '\f078';
+      font-family: 'Font Awesome 6 Free';
+      font-weight: 900;
+      position: absolute;
+      right: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #009688;
+      pointer-events: none;
+    }
+
+    .button-group {
+      margin-top: 2rem;
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
     }
 
     button {
-      margin-top: 1.5rem;
-      background: #009688;
+      flex: 1;
+      min-width: 120px;
+      background: linear-gradient(135deg, #009688, #00bcd4);
       color: white;
-      padding: 0.7rem 1.5rem;
+      padding: 1rem 2rem;
       border: none;
-      border-radius: 6px;
+      border-radius: 12px;
       font-size: 1rem;
+      font-weight: 600;
       cursor: pointer;
-      transition: 0.3s ease;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
     }
 
     button:hover {
-      background: #00796b;
+      transform: translateY(-3px);
+      box-shadow: 0 10px 25px rgba(0, 150, 136, 0.3);
+    }
+
+    button:active {
+      transform: translateY(-1px);
+    }
+
+    button i {
+      margin-right: 0.5rem;
+    }
+
+    .loading {
+      display: none;
+      margin-top: 1rem;
+      color: #009688;
+      font-weight: 500;
+    }
+
+    .loading i {
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .success-message {
+      display: none;
+      background: linear-gradient(135deg, #4caf50, #8bc34a);
+      color: white;
+      padding: 1rem;
+      border-radius: 12px;
+      margin-top: 1rem;
+      font-weight: 500;
+    }
+
+    .error-message {
+      display: none;
+      background: linear-gradient(135deg, #f44336, #ff5722);
+      color: white;
+      padding: 1rem;
+      border-radius: 12px;
+      margin-top: 1rem;
+      font-weight: 500;
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        margin: 10px;
+        padding: 2rem 1.5rem;
+      }
+
+      h1 {
+        font-size: 1.5rem;
+      }
+
+      .features {
+        justify-content: space-between;
+      }
+
+      .feature {
+        font-size: 0.7rem;
+      }
+
+      .button-group {
+        flex-direction: column;
+      }
+
+      button {
+        min-width: auto;
+      }
+    }
+
+    .pulse {
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0% {
+        box-shadow: 0 0 0 0 rgba(0, 150, 136, 0.7);
+      }
+      70% {
+        box-shadow: 0 0 0 10px rgba(0, 150, 136, 0);
+      }
+      100% {
+        box-shadow: 0 0 0 0 rgba(0, 150, 136, 0);
+      }
+    }
+
+    .tooltip {
+      position: relative;
+      cursor: help;
+    }
+
+    .tooltip::before {
+      content: attr(data-tooltip);
+      position: absolute;
+      bottom: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #333;
+      color: white;
+      padding: 0.5rem;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      white-space: nowrap;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+      z-index: 1000;
+    }
+
+    .tooltip:hover::before {
+      opacity: 1;
+      visibility: visible;
+      bottom: calc(100% + 5px);
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>🟢 Discover Local Stores with Bino</h1>
-    <p>Search for a store type in your city and start chatting via WhatsApp!</p>
-
-    <div class="form-group">
-      <label for="category">Choose a category:</label>
-      <select id="category">
-        <option>Salon</option>
-        <option>Grocery</option>
-        <option>Pharmacy</option>
-        <option>Pet Store</option>
-        <option>Hardware</option>
-      </select>
+    <div class="header">
+      <h1><i class="fas fa-store"></i> Discover Local Stores with Bino</h1>
+      <p class="subtitle">Search for a store type in your city and start chatting via WhatsApp!</p>
     </div>
 
-    <div class="form-group">
-      <label for="city">Your city:</label>
-      <select id="city">
-        <option>Bangalore</option>
-        <option>Chennai</option>
-        <option>Delhi</option>
-        <option>Mumbai</option>
-      </select>
+    <div class="features">
+      <div class="feature">
+        <i class="fas fa-search"></i>
+        <span>Smart Search</span>
+      </div>
+      <div class="feature">
+        <i class="fab fa-whatsapp"></i>
+        <span>WhatsApp Chat</span>
+      </div>
+      <div class="feature">
+        <i class="fas fa-map-marker-alt"></i>
+        <span>Local Stores</span>
+      </div>
+      <div class="feature">
+        <i class="fas fa-clock"></i>
+        <span>Quick Connect</span>
+      </div>
     </div>
 
-    <button onclick="searchBino()">Search & Chat</button>
+    <form id="storeSearchForm" onsubmit="handleFormSubmit(event)">
+      <div class="form-group">
+        <label for="category">
+          <i class="fas fa-tags"></i>
+          Choose a category:
+        </label>
+        <div class="select-wrapper">
+          <select id="category" required>
+            <option value="">Select category...</option>
+            <option value="Beauty Salon">💄 Beauty Salon</option>
+            <option value="Hair Salon">✂️ Hair Salon</option>
+            <option value="Grocery Store">🛒 Grocery Store</option>
+            <option value="Supermarket">🏪 Supermarket</option>
+            <option value="Pharmacy">💊 Pharmacy</option>
+            <option value="Medical Store">🏥 Medical Store</option>
+            <option value="Pet Store">🐕 Pet Store</option>
+            <option value="Pet Clinic">🐱 Pet Clinic</option>
+            <option value="Hardware Store">🔧 Hardware Store</option>
+            <option value="Electronics Store">📱 Electronics Store</option>
+            <option value="Clothing Store">👕 Clothing Store</option>
+            <option value="Shoe Store">👟 Shoe Store</option>
+            <option value="Restaurant">🍽️ Restaurant</option>
+            <option value="Cafe">☕ Cafe</option>
+            <option value="Bakery">🍞 Bakery</option>
+            <option value="Gym">💪 Gym/Fitness Center</option>
+            <option value="Book Store">📚 Book Store</option>
+            <option value="Stationery">📝 Stationery Store</option>
+            <option value="Auto Repair">🚗 Auto Repair Shop</option>
+            <option value="Bank">🏦 Bank/ATM</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="city">
+          <i class="fas fa-city"></i>
+          Your city:
+        </label>
+        <div class="select-wrapper">
+          <select id="city" required>
+            <option value="">Select city...</option>
+            <option value="Bangalore">🌆 Bangalore</option>
+            <option value="Chennai">🏙️ Chennai</option>
+            <option value="Delhi">🏛️ Delhi</option>
+            <option value="Mumbai">🌃 Mumbai</option>
+            <option value="Hyderabad">🌇 Hyderabad</option>
+            <option value="Pune">🌄 Pune</option>
+            <option value="Kolkata">🌉 Kolkata</option>
+            <option value="Ahmedabad">🏘️ Ahmedabad</option>
+            <option value="Jaipur">🕌 Jaipur</option>
+            <option value="Lucknow">🏰 Lucknow</option>
+            <option value="Kochi">🌊 Kochi</option>
+            <option value="Chandigarh">🌳 Chandigarh</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="area">
+          <i class="fas fa-map-pin"></i>
+          Area/Locality (Optional):
+        </label>
+        <input type="text" id="area" placeholder="e.g., Koramangala, Indiranagar..." class="tooltip" data-tooltip="This helps find stores closer to you">
+      </div>
+
+      <div class="button-group">
+        <button type="submit" id="searchBtn" class="pulse">
+          <i class="fab fa-whatsapp"></i>
+          Search & Chat
+        </button>
+        <button type="button" onclick="clearForm()" style="background: linear-gradient(135deg, #607d8b, #90a4ae);">
+          <i class="fas fa-refresh"></i>
+          Clear
+        </button>
+      </div>
+    </form>
+
+    <div class="loading" id="loading">
+      <i class="fas fa-spinner"></i>
+      Connecting to WhatsApp...
+    </div>
+
+    <div class="success-message" id="successMessage">
+      <i class="fas fa-check-circle"></i>
+      <span id="successText"></span>
+    </div>
+
+    <div class="error-message" id="errorMessage">
+      <i class="fas fa-exclamation-triangle"></i>
+      <span id="errorText"></span>
+    </div>
+
+    <div style="margin-top: 2rem; padding-top: 1rem; border-top: 1px solid #eee;">
+      <p style="font-size: 0.8rem; color: #888;">
+        <i class="fas fa-info-circle"></i>
+        Powered by Bino Store Discovery Platform
+      </p>
+    </div>
   </div>
 
   <script>
+    // Enhanced JavaScript with better functionality
+    class BinoStoreHelper {
+      constructor() {
+        this.whatsappNumber = '919876543210';
+        this.initializeEventListeners();
+        this.loadUserPreferences();
+      }
+
+      initializeEventListeners() {
+        // Add input validation
+        document.getElementById('category').addEventListener('change', this.validateForm.bind(this));
+        document.getElementById('city').addEventListener('change', this.validateForm.bind(this));
+        
+        // Add real-time validation
+        document.getElementById('area').addEventListener('input', this.sanitizeAreaInput.bind(this));
+        
+        // Add keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+          if (e.ctrlKey && e.key === 'Enter') {
+            this.handleFormSubmit(e);
+          }
+        });
+      }
+
+      validateForm() {
+        const category = document.getElementById('category').value;
+        const city = document.getElementById('city').value;
+        const searchBtn = document.getElementById('searchBtn');
+        
+        if (category && city) {
+          searchBtn.classList.add('pulse');
+          searchBtn.disabled = false;
+        } else {
+          searchBtn.classList.remove('pulse');
+          searchBtn.disabled = false; // Keep enabled for better UX
+        }
+      }
+
+      sanitizeAreaInput(event) {
+        // Remove special characters and limit length
+        const input = event.target;
+        input.value = input.value.replace(/[^a-zA-Z0-9\s,-]/g, '').substring(0, 50);
+      }
+
+      loadUserPreferences() {
+        // Load previously selected values from localStorage
+        const savedCity = localStorage.getItem('binoSelectedCity');
+        const savedCategory = localStorage.getItem('binoSelectedCategory');
+        
+        if (savedCity) {
+          document.getElementById('city').value = savedCity;
+        }
+        if (savedCategory) {
+          document.getElementById('category').value = savedCategory;
+        }
+      }
+
+      saveUserPreferences() {
+        // Save current selections for next time
+        const category = document.getElementById('category').value;
+        const city = document.getElementById('city').value;
+        
+        localStorage.setItem('binoSelectedCity', city);
+        localStorage.setItem('binoSelectedCategory', category);
+      }
+
+      generateSmartMessage() {
+        const category = document.getElementById('category').value;
+        const city = document.getElementById('city').value;
+        const area = document.getElementById('area').value;
+        
+        let message = `🔍 Hi! I'm looking for a ${category} in ${city}`;
+        
+        if (area.trim()) {
+          message += ` near ${area.trim()}`;
+        }
+        
+        message += ` via Bino Store Discovery.\n\n`;
+        message += `📋 My requirements:\n`;
+        message += `• Category: ${category}\n`;
+        message += `• Location: ${city}`;
+        
+        if (area.trim()) {
+          message += ` (${area.trim()})`;
+        }
+        
+        message += `\n• Looking for: Best recommendations with good ratings\n\n`;
+        message += `Can you help me find the best options? 😊`;
+        
+        return message;
+      }
+
+      showLoading() {
+        document.getElementById('loading').style.display = 'block';
+        document.getElementById('successMessage').style.display = 'none';
+        document.getElementById('errorMessage').style.display = 'none';
+      }
+
+      hideLoading() {
+        document.getElementById('loading').style.display = 'none';
+      }
+
+      showSuccess(message) {
+        this.hideLoading();
+        document.getElementById('successText').textContent = message;
+        document.getElementById('successMessage').style.display = 'block';
+        document.getElementById('errorMessage').style.display = 'none';
+        
+        // Auto hide after 3 seconds
+        setTimeout(() => {
+          document.getElementById('successMessage').style.display = 'none';
+        }, 3000);
+      }
+
+      showError(message) {
+        this.hideLoading();
+        document.getElementById('errorText').textContent = message;
+        document.getElementById('errorMessage').style.display = 'block';
+        document.getElementById('successMessage').style.display = 'none';
+        
+        // Auto hide after 5 seconds
+        setTimeout(() => {
+          document.getElementById('errorMessage').style.display = 'none';
+        }, 5000);
+      }
+
+      async handleFormSubmit(event) {
+        event.preventDefault();
+        
+        const category = document.getElementById('category').value;
+        const city = document.getElementById('city').value;
+        
+        // Validation
+        if (!category) {
+          this.showError('Please select a category');
+          document.getElementById('category').focus();
+          return;
+        }
+        
+        if (!city) {
+          this.showError('Please select a city');
+          document.getElementById('city').focus();
+          return;
+        }
+        
+        try {
+          this.showLoading();
+          
+          // Save user preferences
+          this.saveUserPreferences();
+          
+          // Generate smart message
+          const message = this.generateSmartMessage();
+          
+          // Create WhatsApp URL
+          const whatsappURL = `https://wa.me/${this.whatsappNumber}?text=${encodeURIComponent(message)}`;
+          
+          // Add a small delay for better UX
+          await new Promise(resolve => setTimeout(resolve, 1000));
+          
+          // Open WhatsApp
+          const opened = window.open(whatsappURL, '_blank');
+          
+          if (opened) {
+            this.showSuccess(`Opening WhatsApp chat for ${category} in ${city}!`);
+            
+            // Track usage (you can expand this for analytics)
+            this.trackUsage(category, city);
+          } else {
+            this.showError('Please allow popups to open WhatsApp');
+          }
+          
+        } catch (error) {
+          console.error('Error:', error);
+          this.showError('Something went wrong. Please try again.');
+        }
+      }
+
+      trackUsage(category, city) {
+        // Simple usage tracking (can be enhanced with analytics)
+        const usage = JSON.parse(localStorage.getItem('binoUsageStats') || '{}');
+        const key = `${category}-${city}`;
+        usage[key] = (usage[key] || 0) + 1;
+        usage.lastUsed = new Date().toISOString();
+        localStorage.setItem('binoUsageStats', JSON.stringify(usage));
+      }
+
+      clearForm() {
+        document.getElementById('storeSearchForm').reset();
+        document.getElementById('successMessage').style.display = 'none';
+        document.getElementById('errorMessage').style.display = 'none';
+        document.getElementById('loading').style.display = 'none';
+        
+        // Clear saved preferences
+        localStorage.removeItem('binoSelectedCity');
+        localStorage.removeItem('binoSelectedCategory');
+        
+        // Focus on first field
+        document.getElementById('category').focus();
+        
+        this.showSuccess('Form cleared successfully!');
+      }
+    }
+
+    // Initialize the application
+    const binoApp = new BinoStoreHelper();
+    
+    // Global function for form submission (keeping backward compatibility)
+    function handleFormSubmit(event) {
+      binoApp.handleFormSubmit(event);
+    }
+    
+    // Global function for clearing form
+    function clearForm() {
+      binoApp.clearForm();
+    }
+    
+    // Legacy function for backward compatibility
     function searchBino() {
-      const category = document.getElementById('category').value;
-      const city = document.getElementById('city').value;
-
-      const message = `Hi, I'm looking for a ${category} in ${city} via Bino. Can you help me?`;
-      const whatsappURL = `https://wa.me/919876543210?text=${encodeURIComponent(message)}`;
-
-      window.open(whatsappURL, '_blank');
+      const form = document.getElementById('storeSearchForm');
+      const event = new Event('submit');
+      form.dispatchEvent(event);
+    }
+    
+    // Add some delightful interactions
+    document.addEventListener('DOMContentLoaded', function() {
+      // Add hover effects to features
+      document.querySelectorAll('.feature').forEach(feature => {
+        feature.addEventListener('mouseenter', function() {
+          this.style.transform = 'translateY(-5px)';
+        });
+        
+        feature.addEventListener('mouseleave', function() {
+          this.style.transform = 'translateY(0)';
+        });
+      });
+      
+      // Add subtle animations
+      setTimeout(() => {
+        document.querySelector('.container').style.transform = 'scale(1)';
+        document.querySelector('.container').style.opacity = '1';
+      }, 100);
+    });
+    
+    // Service Worker registration for offline capability (optional)
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function() {
+        // You can add a service worker here for offline functionality
+        console.log('Bino Store Helper loaded successfully!');
+      });
     }
   </script>
 </body>
