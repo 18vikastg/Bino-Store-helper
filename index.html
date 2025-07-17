@@ -770,7 +770,7 @@
         <div id="whatsappPreview" class="whatsapp-preview">
           <div class="whatsapp-header">
             <i class="fab fa-whatsapp whatsapp-icon"></i>
-            <span class="whatsapp-title">Your Bino Query</span>
+            <span class="whatsapp-title">Complete Bino Workflow</span>
           </div>
           <div class="whatsapp-message" id="messagePreview"></div>
           <div style="margin-top: 0.5rem; font-size: 0.75rem; color: #a3a3a3; font-style: italic;">
@@ -871,16 +871,34 @@
         const messageElement = document.getElementById('messagePreview');
         
         if (category && city) {
-          const message = this.generateSmartMessage();
           const followUp = this.getFollowUpMessages();
           
           messageElement.innerHTML = `
-            <div><strong>1st Message:</strong> ${message}</div>
-            <div style="margin-top: 0.5rem; color: #a3a3a3; font-size: 0.8em;">
-              <strong>Then when asked:</strong><br>
-              • "What can I help you find?" → "${followUp.step2}"<br>
-              • "Location?" → "${followUp.step3}"<br>
-              • "Details?" → "${followUp.step4}"
+            <div style="margin-bottom: 0.8rem;">
+              <div style="font-weight: bold; color: #25d366; margin-bottom: 0.3rem;">📱 Step-by-Step Bino Workflow:</div>
+              
+              <div style="margin-bottom: 0.5rem;">
+                <strong>1️⃣ First Message:</strong> <code style="background: rgba(255,255,255,0.1); padding: 2px 6px; border-radius: 4px;">New Search</code>
+              </div>
+              
+              <div style="margin-bottom: 0.5rem;">
+                <strong>2️⃣ When asked "What can I help you find?":</strong><br>
+                <code style="background: rgba(255,255,255,0.1); padding: 2px 6px; border-radius: 4px;">${followUp.step2}</code>
+              </div>
+              
+              <div style="margin-bottom: 0.5rem;">
+                <strong>3️⃣ When asked for location:</strong><br>
+                <code style="background: rgba(255,255,255,0.1); padding: 2px 6px; border-radius: 4px;">${followUp.step3}</code>
+              </div>
+              
+              <div style="margin-bottom: 0.5rem;">
+                <strong>4️⃣ When asked for details:</strong><br>
+                <code style="background: rgba(255,255,255,0.1); padding: 2px 6px; border-radius: 4px;">${followUp.step4}</code>
+              </div>
+              
+              <div style="font-size: 0.8em; color: #a3a3a3; margin-top: 0.5rem;">
+                <strong>5️⃣ Finally:</strong> Say "Yes" when Bino confirms your request
+              </div>
             </div>
           `;
           preview.classList.add('show');
